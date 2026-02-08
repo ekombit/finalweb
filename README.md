@@ -1,65 +1,145 @@
+# TechStore – Online Electronics Shop (Final Project)
 
+Modern online store for electronics built with:
 
-# 🛒 TechStore (Online Shop) — Final Project
+- **Frontend**: Static HTML + CSS + Bootstrap + jQuery  
+- **Backend**: Node.js + Express REST API  
+- **Database**: MongoDB + Mongoose  
+- **Authentication**: JWT + bcrypt  
+- **Validation**: express-validator
 
-TechStore is a comprehensive web application for electronics retail. The project features a frontend built with HTML/CSS and a robust REST API backend powered by Node.js and MongoDB.
+Features include user registration/login, profile management, product browsing, and full CRUD for products (admin only).
 
-## 🚀 Key Features
-- **Authentication:** Secure Register and Login using JWT (JSON Web Tokens).
-- **User Profile:** View and edit personal profile information.
-- **Product Management:** Full CRUD operations for administrators.
-- **Security:** Password hashing via bcrypt and input validation.
+## Tech Stack
 
----
+- **Frontend**  
+  HTML5, CSS3, Bootstrap 5, jQuery
 
-## 🛠 Tech Stack
-- **Frontend:** HTML5, CSS3, Bootstrap 5, jQuery
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB + Mongoose
-- **Auth:** JWT + bcrypt
-- **Validation:** express-validator
+- **Backend**  
+  Node.js, Express
 
----
+- **Database**  
+  MongoDB + Mongoose ODM
 
-## 📂 Project Structure
+- **Authentication & Security**  
+  JWT (JSON Web Tokens), bcrypt, express-validator
 
-```text
-TechStore/
-├── frontend/             # Client-side (Static files)
-│   ├── css/              # Stylesheets
-│   ├── js/               # Frontend Logic (API calls, Auth)
-│   ├── index.html        # Home page
-│   ├── login.html        
-│   ├── signup.html       
-│   └── profile.html      
-│
-├── src/                  # Backend (REST API)
-│   ├── config/           # DB Connection
-│   ├── controllers/      # Request Logic
-│   ├── middleware/       # Auth & Error Handlers
-│   ├── models/           # Data Schemas (User, Product)
-│   ├── routes/           # API Endpoints
-│   ├── app.js            # Express Setup
-│   └── server.js         # Entry Point
-│
-├── .env                  # Environment Variables (Secrets)
-├── package.json          # Dependencies
-└── README.md             # Documentation
+## Project Structure
+
 ```
+TechStore/
+├── client/                 # Frontend – static files served by Express
+│   ├── index.html
+│   ├── login.html
+│   ├── signup.html
+│   ├── profile.html
+│   ├── products.html
+│   ├── css/
+│   ├── js/
+│   └── assets/
+│
+├── server/                 # Backend – REST API
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── utils/
+│   ├── app.js
+│   ├── server.js
+│   ├── package.json
+│   └── .env.example
+│
+└── README.md
+```
+text## Quick Start – Local Development
 
+### 1. Clone the repository
 
-⚙️ Setup & Run Locally1) Clone the repositoryBashgit clone <your-repo-url>
+bash
+git clone <your-repository-url>
 cd TechStore
-2) Install dependenciesBashnpm install
-3) Environment VariablesCreate a .env file in the root directory and add the following:Фрагмент кодаPORT=3000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_super_secret
+2. Install dependencies (backend)
+Bashcd server
+npm install
+3. Configure environment variables
+Create file server/.env using .env.example as template:
+envPORT=3000
+MONGO_URI=mongodb://localhost:27017/techstore
+# or use MongoDB Atlas: mongodb+srv://user:pass@cluster0...
+JWT_SECRET=your_very_long_and_random_secret_key_here
 JWT_EXPIRES_IN=7d
-4) Run the serverDevelopment mode (with nodemon):Bashnpm run dev
-5) Access the ProjectFrontend: http://localhost:3000/API Health Check: http://localhost:3000/api/health🔐 Authentication FlowRegister: POST /api/auth/registerLogin: POST /api/auth/login → returns a JWT token.Usage: For protected routes, include the token in the header:Authorization: Bearer <your_token_here>📑 API Documentation1. Auth (Public)MethodEndpointDescriptionPOST/api/auth/registerRegister new userPOST/api/auth/loginLogin and get tokenRegister Body Example:JSON{
+4. Start the server
+Bashnpm run dev
+# or
+node server.js
+The server runs on http://localhost:3000 by default.
+Frontend will be available at:
+→ http://localhost:3000/
+API health check:
+→ http://localhost:3000/api/health
+API Endpoints Overview
+Health Check (Public)
+
+GET /api/health
+→ { "ok": true }
+
+Authentication (Public)
+
+POST /api/auth/register
+Body:JSON{
   "username": "John",
-  "email": "john@mail.com",
-  "password": "password123",
-  "phone": "+7 777 123 45 67"
+  "email": "john@example.com",
+  "password": "strongpass123",
+  "phone": "+77771234567"
 }
-2. Users (Private)Requires Header: Authorization: Bearer <token>MethodEndpointDescriptionGET/api/users/profileGet current user dataPUT/api/users/profileUpdate profile information3. ProductsMethodEndpointAccessDescriptionGET/api/productsPublicGet all productsGET/api/products/:idPublicGet single productPOST/api/productsAdminCreate new productPUT/api/products/:idAdminUpdate productDELETE/api/products/:idAdminDelete product⚠️ NotesAdmin Setup: By default, the first registered user in the database can be granted admin privileges.Security: Do NOT commit the .env file to your GitHub repository.
+POST /api/auth/login
+Body:JSON{
+  "email": "john@example.com",
+  "password": "strongpass123"
+}
+
+Both return:
+JSON{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "user": { "id": "...", "username": "...", "email": "...", "phone": "...", "role": "user" }
+}
+User Profile (Protected – requires JWT)
+
+GET /api/users/profile
+PUT /api/users/profile
+Example body:JSON{
+  "username": "John Updated",
+  "phone": "+77001234567"
+}
+
+Header:
+textAuthorization: Bearer <your-jwt-token>
+Products (Mostly Protected)
+
+GET /api/products              – all products (public or auth)
+GET /api/products/:id          – single product
+
+Admin only (role: "admin"):
+
+POST /api/products
+PUT /api/products/:id
+DELETE /api/products/:id
+
+Example create body:
+JSON{
+  "title": "MacBook Air M3 13\"",
+  "price": 1299,
+  "stock": 8,
+  "brand": "Apple",
+  "category": "laptops",
+  "images": ["https://example.com/macbook.jpg"],
+  "description": "Super lightweight laptop with M3 chip"
+}
+
+#Important Notes
+
+The very first registered user automatically becomes admin (if the users collection is empty).
+Never commit .env file to GitHub!
+Use a strong JWT_SECRET in production.
+Frontend is served as static files from /client folder by Express.
