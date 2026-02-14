@@ -17,7 +17,7 @@ async function register(req, res) {
   const exists = await User.findOne({ email: email.toLowerCase() });
 if (exists) return res.status(409).json({ message: "Email already in use" });
 
-// ✅ first user becomes admin
+//  first user becomes admin
 const usersCount = await User.countDocuments();
 const role = usersCount === 0 ? "admin" : "user";
 

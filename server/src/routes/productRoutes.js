@@ -12,11 +12,9 @@ const {
 
 const router = express.Router();
 
-// ✅ everyone logged in can view
 router.get("/", requireAuth, getProducts);
 router.get("/:id", requireAuth, getProductById);
 
-// ✅ only admin can manage
 router.post(
   "/",
   requireAuth,
