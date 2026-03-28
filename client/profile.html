@@ -40,10 +40,11 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
   <script>
   $(document).ready(function () {
-    const API_BASE = "";
+    const API_BASE = window.API_BASE || "";
     const token = localStorage.getItem("token");
 
     if (!token) {

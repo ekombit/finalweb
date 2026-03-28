@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "mongodb": "^7.1.0"
+  "name": "finalweb",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix server",
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

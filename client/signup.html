@@ -72,6 +72,7 @@
     </form>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
   <script>
   $(document).ready(function () {
@@ -92,7 +93,7 @@
 
       if (!valid) return;
 
-      const API_BASE = "";
+      const API_BASE = window.API_BASE || "";
 
       try {
         const payload = { username: name, email, password };

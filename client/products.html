@@ -282,6 +282,7 @@ body.light-mode .btn-custom:hover {
     © 2025 TechStore | All Rights Reserved.
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
   <script>
 $(document).ready(function () {
@@ -321,7 +322,9 @@ $(document).ready(function () {
 
   // ===== PRODUCTS API =====
   async function api(url, options = {}) {
-    const res = await fetch(url, {
+    const base = window.API_BASE || "";
+    const fullUrl = url.indexOf("http") === 0 ? url : base + url;
+    const res = await fetch(fullUrl, {
       ...options,
       headers: {
         ...(options.headers || {}),

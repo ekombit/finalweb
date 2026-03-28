@@ -1,0 +1,12 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# After connect repo, set secrets in Dashboard: MONGO_URI, JWT_SECRET
+services:
+  - type: web
+    name: finalweb
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

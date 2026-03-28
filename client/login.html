@@ -52,6 +52,7 @@
     </form>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/theme.js"></script>
   <script>
 $(document).ready(function(){
@@ -66,7 +67,8 @@ $(document).ready(function(){
     if(password.length < 8){ $("#passwordError").show(); return; }
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const base = window.API_BASE || "";
+      const res = await fetch(base + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
